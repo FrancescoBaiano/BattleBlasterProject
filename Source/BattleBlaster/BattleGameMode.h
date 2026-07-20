@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 
 #include "Tank.h"
+#include "ScreenMessage.h"
 
 #include "BattleGameMode.generated.h"
 
@@ -22,6 +23,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UScreenMessage> screenMessageClass;
+
+	UScreenMessage* screenMessageWidget;
+
 	UPROPERTY(EditAnywhere)
 	float gameOverDelay = 3.f;
 
