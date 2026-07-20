@@ -5,6 +5,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Tower.h"
+#include "BattleGameInstance.h"
 
 void ABattleGameMode::BeginPlay()
 {
@@ -43,9 +44,12 @@ void ABattleGameMode::BeginPlay()
 
 void ABattleGameMode::ActorDied(AActor* DeadActor)
 {
+	bool isGameOver = false;
+
 	if (DeadActor == tank)
 	{
 		tank->HandleDestruction();
+		isGameOver = true;
 	}
 	else
 	{
@@ -56,7 +60,39 @@ void ABattleGameMode::ActorDied(AActor* DeadActor)
 			towerCount--;
 			if (towerCount == 0)
 			{
+				isGameOver = true;
+				isVictory = true;
+			}
+		}
+	}
 
+	if (isGameOver)
+	{
+		FString gameOverString = isVictory ? "Victory" : "Defeat";
+
+		UE_LOG(LogTemp, Warning, TEXT("Game is Over: %s"), *gameOverString);
+
+		FTimerHandle gameOverTimerHandle;
+		GetWorldTimerManager().SetTimer(gameOverTimerHandle, this, &ABattleGameMode::OnGameOverTimerTimeout, gameOverDelay, false);
+	}
+}
+
+void ABattleGameMode::OnGameOverTimerTimeout()
+{
+	UGameInstance* gameInstance = GetGameInstance();
+
+	if (gameInstance)
+	{
+		UBattleGameInstance* battleGameInstance = Cast<UBattleGameInstance>(gameInstance);
+		if (battleGameInstance)
+		{
+			if (isVictory)
+			{
+				battleGameInstance->LoadNextLevel();
+			}
+			else
+			{
+				battleGameInstance->RestartCurrentLevel();
 			}
 		}
 	}
