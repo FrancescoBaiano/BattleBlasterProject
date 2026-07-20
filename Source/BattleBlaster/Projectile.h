@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 #include "Projectile.generated.h"
 
@@ -31,6 +33,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	UProjectileMovementComponent* projectileMovementComp;
+
+	UPROPERTY(VisibleAnywhere)
+	UNiagaraComponent* trailParticles;
+
+	UPROPERTY(EditAnywhere)
+	UNiagaraSystem* hitParticles;
 
 	UPROPERTY(EditAnywhere)
 	float damage = 25.f;

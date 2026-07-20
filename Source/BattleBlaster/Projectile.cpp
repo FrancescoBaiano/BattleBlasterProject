@@ -16,6 +16,9 @@ AProjectile::AProjectile()
 	projectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComp"));
 	projectileMovementComp->InitialSpeed = 1500.f;
 	projectileMovementComp->MaxSpeed = 1500.f;
+
+	trailParticles = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailParticles"));
+	trailParticles->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -41,6 +44,11 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 		if (OtherActor && OtherActor != owner && OtherActor != this)
 		{
 			UGameplayStatics::ApplyDamage(OtherActor, damage, owner->GetInstigatorController(), this, UDamageType::StaticClass());
+
+			if (hitParticles)
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), hitParticles, GetActorLocation(), GetActorRotation());
+			}
 		}
 	}
 
