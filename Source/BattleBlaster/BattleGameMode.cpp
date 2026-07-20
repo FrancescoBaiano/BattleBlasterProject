@@ -40,6 +40,27 @@ void ABattleGameMode::BeginPlay()
 		}
 		i++;
 	}
+
+	countdownSeconds = countdownDelay;
+	GetWorldTimerManager().SetTimer(countdownTimerHandle, this, &ABattleGameMode::OnCountdownTimerTimeout, 1.f, true);
+}
+
+void ABattleGameMode::OnCountdownTimerTimeout()
+{
+	countdownSeconds --;
+	if (countdownSeconds > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Countdown: %d"), countdownSeconds);
+	}
+	else if (countdownSeconds == 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GAME START!"));
+		tank->SetPlayerEnabled(true);
+	}
+	else
+	{
+		GetWorldTimerManager().ClearTimer(countdownTimerHandle);
+	}
 }
 
 void ABattleGameMode::ActorDied(AActor* DeadActor)
