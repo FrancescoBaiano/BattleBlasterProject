@@ -47,6 +47,9 @@ public:
 	USoundBase* hitSound;
 
 	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCameraShakeBase> hitCameraShakeClass;
+
+	UPROPERTY(EditAnywhere)
 	float damage = 25.f;
 
 	UFUNCTION()
