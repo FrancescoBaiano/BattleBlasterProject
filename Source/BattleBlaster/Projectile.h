@@ -41,6 +41,12 @@ public:
 	UNiagaraSystem* hitParticles;
 
 	UPROPERTY(EditAnywhere)
+	USoundBase* launchSound;
+
+	UPROPERTY(EditAnywhere)
+	USoundBase* hitSound;
+
+	UPROPERTY(EditAnywhere)
 	float damage = 25.f;
 
 	UFUNCTION()
